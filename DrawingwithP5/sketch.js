@@ -46,11 +46,11 @@ function draw() {
     vertex(190, 920); //1
     vertex(220, 990); //2
     vertex(285, 990); //3
-    vertex(230, 1030); //4
+    vertex(230, 1040); //4
     vertex(250, 1100); //5
     vertex(190, 1060); //6
     vertex(130, 1100); //7
-    vertex(150, 1030); //8
+    vertex(150, 1040); //8
     vertex(95, 990); //9
     vertex(160, 990); //10
     endShape(CLOSE);
