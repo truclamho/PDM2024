@@ -22,7 +22,7 @@ function setup() {
 function draw() {
   background(0);
 
-  if (keyIsDown('d')) {
+  if (kb.pressing('d')) {
     walkRight();
   } else if (kb.pressing('a')) {
     walkLeft();
