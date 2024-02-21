@@ -10,8 +10,8 @@ function preload() {
     walkDown: {row: 5, col: 6, frames: 6}
   };
 
-  characters.push(new Character(100,100,80,80,'assets/cyclops.png',animations));
-  characters.push(new Character(200,200,80,80,'assets/cyclops.png',animations));
+  characters.push(new Character(100,100,80,80,'assets/ninja.png',animations));
+  characters.push(new Character(200,200,80,80,'assets/ninja.png',animations));
 }
 
 function setup() {
