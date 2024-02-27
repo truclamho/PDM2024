@@ -36,7 +36,7 @@ function setup() {
   button4.position (195, 150);
   button4.mousePressed(() => sounds.player('stream').start());
 
-  pitchSlider = createSlider (-50, 50, 0, 0.1);
+  pitchSlider = createSlider (-48, 48, 0, 0.01);
   pitchSlider.position (140, 260);
   pitchSlider.mouseMoved (() => pitchShift.pitch = pitchSlider.value);
 }
