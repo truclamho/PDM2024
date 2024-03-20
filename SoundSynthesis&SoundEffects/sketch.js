@@ -35,8 +35,8 @@ let reverb = new Tone.Freereverb({
   wet: 0.5,
 }).toDestination();
 
-  swordsound.connect(RingModulator).connect(pitchShift).connect(reverb);
-  lfo.connect(swordsound.oscillator.frequency);
+  swordsound.connect(ringModulator).connect(pitchShift).connect(reverb);
+  lfo.connect(swordsound.frequency);
   lfo.start();
 
 function playSwordSound() {
