@@ -17,9 +17,9 @@ function setupSound() {
 
   squishstep.volume.value = 10; 
 
-  // ladybugmusic = new Tone.Player("assets/game.mp3").toDestination();
-  // // ladybugmusic.loop = true;
-  // ladybugmusic.volume.value = -10;
+  ladybugmusic = new Tone.Player("assets/game.mp3").toDestination();
+  // ladybugmusic.loop = true;
+  ladybugmusic.volume.value = -10;
   
 }
 
