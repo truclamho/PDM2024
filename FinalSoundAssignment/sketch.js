@@ -142,8 +142,6 @@ function draw() {
   }
 }
 
-
-
 let speedIncrement = 0.3; 
 
 function addNewBugs() {
