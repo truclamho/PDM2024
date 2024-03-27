@@ -1,33 +1,33 @@
 let squishstep;
 let ladybugmusic;
 
-function setupSound() {
-  squishstep = new Tone.Synth({
-    oscillator: {
-      type: "sine",
-      frequency: 1000,
-    },
-    envelope: {
-      attack: 0.01,
-      decay: 0.5,
-      sustain: 0.05,
-      release: 0.1,
-    }
-  }).toDestination();
+// function setupSound() {
+//   squishstep = new Tone.Synth({
+//     oscillator: {
+//       type: "sine",
+//       frequency: 1000,
+//     },
+//     envelope: {
+//       attack: 0.01,
+//       decay: 0.5,
+//       sustain: 0.05,
+//       release: 0.1,
+//     }
+//   }).toDestination();
 
-  squishstep.volume.value = 10; 
+//   squishstep.volume.value = 10; 
 
-  ladybugmusic = new Tone.Player("assets/game.mp3").toDestination();
-  // ladybugmusic.loop = true;
-  ladybugmusic.volume.value = -10;
+//   ladybugmusic = new Tone.Player("assets/game.mp3").toDestination();
+//   // ladybugmusic.loop = true;
+//   ladybugmusic.volume.value = -10;
   
-}
+// }
 
-function playSquishSound() {
-  squishstep.triggerAttackRelease("C2", '8n');
-}
+// function playSquishSound() {
+//   squishstep.triggerAttackRelease("C2", '8n');
+// }
 
-setupSound();
+// setupSound();
 
 let spriteSheet;
 let chronoSheet;
