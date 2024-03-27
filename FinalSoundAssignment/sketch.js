@@ -159,6 +159,8 @@ function adjustLadybybugMusicSpeed(score) {
   const playbackRateIncreasePerScore = 0.1; 
 
   const newPlaybackRate = basePlaybackRate + playbackRateIncreasePerScore * score;
+  
+  ladybugmusic.set({ playbackRate: newPlaybackRate });
 }
 
 function mousePressed() {
