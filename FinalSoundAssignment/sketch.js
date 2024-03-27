@@ -1,5 +1,5 @@
 let sword;
-let panel = false;
+let panel = false; 
 
 let swordsound = new Tone.Synth({
   oscillator: {
