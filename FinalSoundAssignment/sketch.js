@@ -88,12 +88,12 @@ function keyPressed() {
   switch(game.state) {
     case GameState.Start:
       game.state = GameState.Playing;
-      ladybugmusic.start(); 
+      // ladybugmusic.start(); 
       break;
     case GameState.GameOver:
       reset();
       game.state = GameState.Playing;
-      ladybugmusic.start(); 
+      // ladybugmusic.start(); 
       break;
   }
 }
@@ -152,14 +152,14 @@ function addNewBugs() {
   }
 }
 
-function adjustLadybybugMusicSpeed(score) {
-  const basePlaybackRate = 2;
-  const playbackRateIncreasePerScore = 0.1; 
+// function adjustLadybybugMusicSpeed(score) {
+//   const basePlaybackRate = 2;
+//   const playbackRateIncreasePerScore = 0.1; 
 
-  const newPlaybackRate = basePlaybackRate + playbackRateIncreasePerScore * score;
+//   const newPlaybackRate = basePlaybackRate + playbackRateIncreasePerScore * score;
   
-  ladybugmusic.set({ playbackRate: newPlaybackRate });
-}
+//   ladybugmusic.set({ playbackRate: newPlaybackRate });
+// }
 
 function mousePressed() {
   switch (game.state) {
@@ -174,8 +174,8 @@ function mousePressed() {
           for (let j = 0; j < animations.length; j++) {
             animations[j].speed += speedIncrement;
           }
-          let newPlaybackRate = ladybugmusic.playbackRate * 2; 
-          ladybugmusic.set({ playbackRate: newPlaybackRate });
+          // let newPlaybackRate = ladybugmusic.playbackRate * 2; 
+          // ladybugmusic.set({ playbackRate: newPlaybackRate });
 
           let newSpeed = 0.3 + speedIncrement * game.score;
           animations.push(new WalkingAnimation(random(spriteSheets), 62, 62, random(width), random(height), 6, newSpeed, 6, random([0, 1])));
