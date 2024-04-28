@@ -17,7 +17,7 @@ function setup() {
   if (usedPorts.length > 0) {
     port.open(usedPorts[0], 57600);
   }
-  frameRate(20);
+  frameRate(90);
 }
 
 function draw() {
