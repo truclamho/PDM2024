@@ -46,30 +46,27 @@ function draw() {
     }
   }
 
-  // Determine the background color based on the circle's position
   noStroke();
   if (circleX < width / 2) {
-    fill('grey');  // Left side turns grey
+    fill('grey'); 
     rect(0, 0, width / 2, height);
     fill('lightgreen');
     rect(width / 2, 0, width / 2, height);
   } else {
     fill('skyblue');
     rect(0, 0, width / 2, height);
-    fill('grey');  // Right side turns grey
+    fill('grey');  
     rect(width / 2, 0, width / 2, height);
   }
 
-  // Draw the circle
   stroke(0);
   if (sw == 1) {
     fill("blue");
   } else {
     fill(255);
   }
-  circle(circleX, circleY, 20);  // Increased circle size for visibility
+  circle(circleX, circleY, 20);
 
-  // Communicate with Arduino if needed
   if (port.opened() && frameCount % 3 == 0) {
     let pixel = get(circleX, circleY);
     console.log(pixel);
@@ -80,9 +77,9 @@ function draw() {
 
 function mousePressed() {
   if (mouseX < width / 2) {
-    port.write('1'); // Turn on the blue LED
+    port.write('1'); 
   } else {
-    port.write('0'); // Turn off the blue LED
+    port.write('0');
   }
 }
 
