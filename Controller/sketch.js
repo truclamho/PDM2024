@@ -1,12 +1,3 @@
-let squishstep;
-let ladybugmusic;
-
-let port;
-let joyX = 0, joyY = 0, sw = 0;
-let connectButton;
-let circleX, circleY;
-let speed = 3;
-
 function setupSound() {
   squishstep = new Tone.Synth({
     oscillator: {
@@ -24,7 +15,7 @@ function setupSound() {
   squishstep.volume.value = 10; 
 
   ladybugmusic = new Tone.Player("assets/game.mp3").toDestination();
-  ladybugmusic.loop = true;
+  // ladybugmusic.loop = true;
   ladybugmusic.volume.value = -10;
   
 }
@@ -61,8 +52,15 @@ function preload() {
   gameFont = loadFont("assets/PressStart2P-Regular.ttf");
 }
 
-function setup() {
+let port;
+let joyX = 0, joyY = 0, sw = 0;
+let connectButton;
+let circleX, circleY;
+let speed = 3;
 
+
+
+function setup() {
   port = createSerial();
   createCanvas(400, 400);
   circleX = width / 2;
@@ -75,6 +73,8 @@ function setup() {
   if (usedPorts.length > 0) {
     port.open(usedPorts[0], 57600);
   }
+  frameRate(90);
+
   imageMode(CENTER);
   angleMode(DEGREES);
   textFont(gameFont);
@@ -120,40 +120,11 @@ function draw() {
   switch (game.state) {
     case GameState.Playing:
       background(220);
-
-      let latest = port.readUntil("\n");
-      let values = latest.split(",");
-
-      if (values.length > 2) {
-        joyX = values[0];
-        joyY = values[1];
-        sw = Number(values[2]);
-
-        console.log("JoyX:", joyX, "JoyY:", joyY, "SW:", sw);
-
-        circleX += joyX * speed;
-        circleY += joyY * speed;
-      }
-      
-      if (port.opened() && frameCount % 3 == 0) {
-        let pixel = get(circleX, circleY);
-        console.log(pixel);
-        let message = `${pixel[0]} ${pixel[1]} ${pixel[2]}\n`;
-        port.write(message);
-      }
-      
-      stroke(0);
-      if (sw == 1) {
-        fill("blue");
-      } else {
-        fill (255);
-      }
-      circle(circleX, circleY, 5);
-
+  
       for (let i = 0; i < animations.length; i++) {
         animations[i].draw();
       }
-    
+      
       addNewBugs(); 
       
       fill('green');
@@ -164,11 +135,9 @@ function draw() {
       text("Time: ", 315, 30)
       text(ceil(currentTime), 375, 30);
       game.elapsedTime += deltaTime / 1000;
-
       if (currentTime < 0)
         game.state = GameState.GameOver;
       break;
-
     case GameState.GameOver:
       game.maxScore = max(game.score, game.maxScore);
       background(0);
@@ -189,15 +158,72 @@ function draw() {
       text("Press Any Key to Start", 200, 250);
       break;
   }
+
+  let latest = port.readUntil("\n").trim();
+  let values = latest.split(",");
+  if (values.length > 2) {
+    joyX = parseInt(values[0]);
+    joyY = parseInt(values[1]);
+    sw = parseInt(values[2]);
+
+    if (sw === 1 && game.state === GameState.Playing) {
+      let playSound = false;
+      for (let i = 0; i < animations.length; i++) {
+        if (animations[i].contains(circleX, circleY) && !animations[i].squished) {
+          animations[i].squish();
+          //playSquishSound();
+          playSound = true;
+          game.score += 1;
+          // adjustLadybugSpeed(game.score);
+        }
+      } 
+      if(playSound) {
+        playSquishSound();
+      }
+    }
+    // } else if (sw === 0 && game.state === GameState.Playing) {
+    //   game.state === GameState.Playing;
+    //   }
+    
+  
+    if (joyX > 0) {
+      circleX += speed;
+    } else if (joyX < 0) {
+      circleX -= speed;
+    }
+
+    if (joyY > 0) {
+      circleY += speed;
+    } else if (joyY < 0) {
+      circleY -= speed;
+    }
+  }
+
+
+  stroke(0);
+  if (sw == 1) {
+    fill ('blue');
+  } else {
+    fill(255);
+  }
+  circle(circleX, circleY, 20);
+
+  if (port.opened() && frameCount % 3 == 0) {
+    let pixel = get(circleX, circleY);
+    console.log(pixel);
+    let message = `${pixel[0]} ${pixel[1]} ${pixel[2]}\n`;
+    port.write(message);
+  }
 }
 
 function connect() {
   if (!port.opened()) {
-    port.open('/dev/cu.usbmodem2101', 57600);
+    port.open('Arduino', 57600);
   } else {
     port.close();
   }
 }
+
 
 let speedIncrement = 0.3; 
 
@@ -218,31 +244,32 @@ function adjustLadybybugMusicSpeed(score) {
   ladybugmusic.set({ playbackRate: newPlaybackRate });
 }
 
-function mousePressed() {
-  switch (game.state) {
-    case GameState.Playing:
-      for (let i = 0; i < animations.length; i++) {
-        let contains = animations[i].contains(joyX, joyY); 
-        if (contains && !animations[i].squished) {
-          animations[i].squish();
-          playSquishSound();
-          game.score += 1;
-          adjustLadybugSpeed(game.score);
-          for (let j = 0; j < animations.length; j++) {
-            animations[j].speed += speedIncrement;
-          }
-          let newPlaybackRate = ladybugmusic.playbackRate * 2; 
-          ladybugmusic.set({ playbackRate: newPlaybackRate });
+// function mousePressed() {
+//   switch (game.state) {
+//     case GameState.Playing:
+//       if (sw === 1) {
+//         for (let i = 0; i < animations.length; i++) {
+//           let contains = animations[i].intersects(circleX, circleY, 10); // 10 is the radius of the white circle representing the joystick
+//           if (contains && !animations[i].squished) {
+//             animations[i].squish();
+//             playSquishSound();
+//             game.score += 1;
+//             adjustLadybugSpeed(game.score);
+//             for (let j = 0; j < animations.length; j++) {
+//               animations[j].speed += speedIncrement;
+//             }
+//             let newPlaybackRate = ladybugmusic.playbackRate * 2; 
+//             ladybugmusic.set({ playbackRate: newPlaybackRate });
+//             let newSpeed = 0.3 + speedIncrement * game.score;
+//             animations.push(new WalkingAnimation(random(spriteSheets), 62, 62, random(width), random(height), 6, newSpeed, 6, random([0, 1])));
+//           }
+//         }
+//       }
+//       break;
+//   }
+// }
 
-          let newSpeed = 0.3 + speedIncrement * game.score;
-          animations.push(new WalkingAnimation(random(spriteSheets), 62, 62, random(width), random(height), 6, newSpeed, 6, random([0, 1])));
 
-          port.write("bugSquished\n");
-        }
-      }
-      break;
-  }
-}
 
 class WalkingAnimation {
   constructor(spritesheet, sw, sh, dx, dy, animationLength, speed, framerate, vertical = false, offsetX = 0, offsetY = 0) {
@@ -282,6 +309,7 @@ class WalkingAnimation {
       scale(this.xDirection, 1); 
     }
 
+    
     image(this.spritesheet, 0, 0, this.sw, this.sh, this.u * this.sw + this.offsetX, this.v * this.sh + this.offsetY, this.sw, this.sh);
     pop();
   
@@ -336,4 +364,5 @@ class WalkingAnimation {
     this.v = 8;
   }
 }
+
 
