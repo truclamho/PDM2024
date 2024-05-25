@@ -328,6 +328,8 @@ function updateObjects(objects) {
   }
 }
 
+// for keyboard
+
 // function handlePlayerMovement() {
 //   let moveSpeed = 5;
 
@@ -354,6 +356,8 @@ function updateObjects(objects) {
 
 //   prince.position.x = constrain(prince.position.x, prince.width / 2, width - prince.width / 2);
 // }
+
+// for joystick
 
 console.log("joyX value:", joyX);
 
